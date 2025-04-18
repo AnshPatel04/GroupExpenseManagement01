@@ -1,0 +1,176 @@
+﻿@{
+    var selectedMembersList = Model.SelectedMembers.ToList();
+}
+
+@model GroupModel
+
+<div class="pagetitle">
+    <h1>Group Form</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Group" asp-action="Index">Groups</a></li>
+            <li class="breadcrumb-item active"> Add-Edit Group </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title mb-3 text-center"> @TempData["PageTitle"] </h5>
+
+        <form method="post" asp-action="AddUpdateGroup" asp-controller="Group">
+            <input type="hidden" asp-for="GroupID" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="CreatedBy" />
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label"><strong><span class="text-danger">*</span>Group Name</strong></label>
+                <div class="col-sm-10">
+                    <input asp-for="GroupName" class="form-control" />
+                    <span asp-validation-for="GroupName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label"><strong><span class="text-danger">*</span>Description</strong></label>
+                <div class="col-sm-10">
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            @* <div class="row mb-3">
+                <label class="col-sm-2 col-form-label"><strong>Select Members</strong></label>
+                <div class="col-sm-10">
+                    <!-- Search bar -->
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search Members" title="Enter search keyword">
+
+                    <div class="scrollable-checkbox-list">
+                        @if (ViewBag.UserList != null)
+                        {
+                            @foreach (var user in ViewBag.UserList)
+                            {
+                                <div class="form-check my-2 user-item">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="user_@user.UserID"
+                                           name="SelectedMembers"
+                                           value="@user.UserID"
+                                    @(selectedMembersList.Contains(user.UserID) ? "checked" : "") />
+                                    <label class="form-check-label" for="user_@user.UserID">
+                                        @user.UserName (@user.Email)
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <span asp-validation-for="SelectedMembers" class="text-danger"></span>
+                </div>
+            </div> *@
+
+            <!-- Members Selection -->
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label"><strong>Select Members</strong></label>
+                <div class="col-sm-10">
+                    <!-- Container for search and list -->
+                    <div class="search-list-container border rounded p-3">
+                        <!-- Search Input -->
+                        <div class="mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search Members" title="Enter search keyword" />
+                        </div>
+
+                        <!-- Scrollable Checkbox List -->
+                        <div class="scrollable-checkbox-list">
+                            @if (ViewBag.UserList != null)
+                            {
+                                @foreach (var user in ViewBag.UserList)
+                                {
+                                    <div class="form-check my-2 user-item">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               id="user_@user.UserID"
+                                               name="SelectedMembers"
+                                               value="@user.UserID"
+                                        @(selectedMembersList.Contains(user.UserID) ? "checked" : "") />
+                                        <label class="form-check-label" for="user_@user.UserID">
+                                            @user.UserName (@user.Email)
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <!-- Validation Message -->
+                        <span asp-validation-for="SelectedMembers" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*  <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Select Members</label>
+            <div class="col-sm-10">
+            <div>
+            @if (ViewBag.UserList != null)
+            {
+            @foreach (var user in ViewBag.UserList)
+            {
+            <div class="form-check my-2">
+            <input type="checkbox"
+            class="form-check-input"
+            id="user_@user.UserID"
+            name="SelectedMembers"
+            value="@user.UserID"
+            @(selectedMembersList.Contains(user.UserID) ? "checked" : "") />
+            <label class="form-check-label" for="user_@user.UserID">
+            @user.UserName (@user.Email)
+            </label>
+            </div>
+            }
+            }
+            </div>
+            <span asp-validation-for="SelectedMembers" class="text-danger"></span>
+            </div>
+            </div> *@
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a asp-action="Index" asp-controller="Group" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".user-item").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+}
+
+@section Styles {
+
+    <style>
+        .search-list-container {
+            -webkit-transform: translateZ(0); /* Trigger GPU rendering for better clarity */
+            transform: translateZ(0);
+        }
+
+        .scrollable-checkbox-list {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+    </style>
+}
