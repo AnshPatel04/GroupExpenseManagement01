@@ -4,9 +4,13 @@
 API
 </br>
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+</br>
 dotnet add package Microsoft.EntityFrameworkCore.Tools
+</br>
 dotnet add package Swashbuckle.AspNetCore
+</br>
 dotnet add package Microsoft.Data.SqlClient
+</br>
 dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson (Version 8.0.0)
 
 MVC
